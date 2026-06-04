@@ -10,6 +10,22 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://osama-98.github.io/articles/"/>
   </url>
 
+  <!-- SOLID Principles — English + Arabic -->
+  <url>
+    <loc>https://osama-98.github.io/articles/articles/solid-principles/en.html</loc>
+    <lastmod>2026-06-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://osama-98.github.io/articles/articles/solid-principles/en.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://osama-98.github.io/articles/articles/solid-principles/ar.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://osama-98.github.io/articles/articles/solid-principles/en.html"/>
+  </url>
+  <url>
+    <loc>https://osama-98.github.io/articles/articles/solid-principles/ar.html</loc>
+    <lastmod>2026-06-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://osama-98.github.io/articles/articles/solid-principles/ar.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://osama-98.github.io/articles/articles/solid-principles/en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://osama-98.github.io/articles/articles/solid-principles/en.html"/>
+  </url>
+
   <!-- PSR Standards — English + Arabic -->
   <url>
     <loc>https://osama-98.github.io/articles/articles/psr-standards/en.html</loc>

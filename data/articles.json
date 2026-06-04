@@ -1,5 +1,22 @@
 [
   {
+    "id": "solid-principles",
+    "title": {
+      "en": "The SOLID Principles, Made Simple",
+      "ar": "مبادئ SOLID بالتبسيط"
+    },
+    "summary": {
+      "en": "The five SOLID principles of object-oriented design, each with a before/after PHP example.",
+      "ar": "مبادئ SOLID الخمسة في التصميم الكائني، كل مبدأ بمثال PHP قبل/بعد."
+    },
+    "date": "2026-06-04",
+    "tags": ["PHP", "Software Design"],
+    "paths": {
+      "en": "articles/solid-principles/en.html",
+      "ar": "articles/solid-principles/ar.html"
+    }
+  },
+  {
     "id": "psr-standards",
     "title": {
       "en": "PSR Standards Explained",
