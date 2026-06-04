@@ -1,0 +1,19 @@
+[
+  {
+    "id": "psr-standards",
+    "title": {
+      "en": "PSR Standards Explained",
+      "ar": "دليل معايير الـ PSR"
+    },
+    "summary": {
+      "en": "A simple walkthrough of every PHP Standards Recommendation, with examples.",
+      "ar": "شرح مبسّط لجميع معايير PHP مع أمثلة عملية."
+    },
+    "date": "2026-06-04",
+    "tags": ["PHP", "Standards"],
+    "paths": {
+      "en": "articles/psr-standards/en.html",
+      "ar": "articles/psr-standards/ar.html"
+    }
+  }
+]

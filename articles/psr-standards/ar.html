@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ===================== SEO ===================== -->
+<!-- ملاحظة: استبدل USERNAME أدناه باسم مستخدم/مستودع GitHub بعد تفعيل Pages. -->
+<title>دليل معايير PSR في PHP — شرح كامل من PSR-0 إلى PSR-22</title>
+<meta name="description" content="شرح مبسّط ومدعوم بأمثلة عملية لجميع معايير PHP الموصى بها (PSR) — المعتمدة والمهجورة والمسودات — من PSR-0 إلى PSR-22.">
+<meta name="author" content="Articles">
+<meta name="keywords" content="PHP, PSR, معايير PHP, PHP-FIG, PSR-4, PSR-12, التحميل التلقائي, معايير الترميز">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#8a4b2d">
+<link rel="canonical" href="https://osama-98.github.io/articles/articles/psr-standards/ar.html">
+
+<!-- بدائل اللغة: النسخة العربية ⇄ الإنجليزية لنفس المقال -->
+<link rel="alternate" hreflang="ar" href="https://osama-98.github.io/articles/articles/psr-standards/ar.html">
+<link rel="alternate" hreflang="en" href="https://osama-98.github.io/articles/articles/psr-standards/en.html">
+<link rel="alternate" hreflang="x-default" href="https://osama-98.github.io/articles/articles/psr-standards/en.html">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Articles">
+<meta property="og:title" content="دليل معايير PSR في PHP">
+<meta property="og:description" content="شرح مبسّط ومدعوم بأمثلة عملية لجميع معايير PHP الموصى بها، من PSR-0 إلى PSR-22.">
+<meta property="og:url" content="https://osama-98.github.io/articles/articles/psr-standards/ar.html">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="article:published_time" content="2026-06-04">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="Standards">
+
+<!-- Twitter card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="دليل معايير PSR في PHP">
+<meta name="twitter:description" content="شرح مبسّط ومدعوم بأمثلة عملية لجميع معايير PHP الموصى بها، من PSR-0 إلى PSR-22.">
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "دليل معايير PSR في PHP",
+  "description": "شرح مبسّط ومدعوم بأمثلة عملية لجميع معايير PHP الموصى بها، من PSR-0 إلى PSR-22.",
+  "inLanguage": "ar",
+  "datePublished": "2026-06-04",
+  "author": { "@type": "Organization", "name": "Articles" },
+  "publisher": { "@type": "Organization", "name": "Articles" },
+  "mainEntityOfPage": "https://osama-98.github.io/articles/articles/psr-standards/ar.html",
+  "keywords": "PHP, PSR, PHP-FIG, معايير الترميز, التحميل التلقائي"
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f1ea;
+    --paper:#fffdf8;
+    --ink:#1f2421;
+    --muted:#5c6660;
+    --accent:#8a4b2d;
+    --accent-soft:#e8d9cd;
+    --line:#e3ddd1;
+    --code-bg:#1f2421;
+    --code-ink:#f4f1ea;
+    --code-key:#e0a458;
+    --code-str:#9bbf8a;
+    --code-com:#7b857f;
+    --php:#6c7eb7;
+    --ok:#4f7a44;
+    --ok-bg:#e1ecdb;
+    --dep:#a3473b;
+    --dep-bg:#f0ddd9;
+    --draft:#3f6699;
+    --draft-bg:#dbe5f0;
+    --aban:#6b6b6b;
+    --aban-bg:#e6e4df;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 85% -5%, rgba(138,75,45,.07), transparent 45%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Tajawal', sans-serif;
+    line-height:1.9;
+    font-size:18px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:820px; margin:0 auto; padding:64px 24px 96px;}
+
+  /* Header */
+  header{margin-bottom:40px; border-bottom:2px solid var(--line); padding-bottom:32px;}
+  .kicker{
+    display:inline-block; font-size:14px; font-weight:700; letter-spacing:1px;
+    color:var(--accent); background:var(--accent-soft);
+    padding:6px 14px; border-radius:999px; margin-bottom:20px;
+  }
+  h1{font-size:clamp(32px,6.5vw,50px); font-weight:800; margin:0 0 12px; line-height:1.25;}
+  .sub{color:var(--muted); font-size:19px; margin:0;}
+
+  /* Legend */
+  .legend{
+    display:flex; flex-wrap:wrap; gap:10px; margin:28px 0 8px;
+  }
+  .legend span{
+    font-size:14px; font-weight:700; padding:5px 12px; border-radius:999px;
+  }
+  .lg-ok{color:var(--ok); background:var(--ok-bg);}
+  .lg-dep{color:var(--dep); background:var(--dep-bg);}
+  .lg-draft{color:var(--draft); background:var(--draft-bg);}
+  .lg-aban{color:var(--aban); background:var(--aban-bg);}
+
+  /* Sections */
+  section{margin-top:52px;}
+  .group-title{
+    font-size:28px; font-weight:800; margin:0 0 6px; line-height:1.4;
+    padding-right:16px; border-right:5px solid var(--accent);
+  }
+  .group-desc{color:var(--muted); font-size:16px; margin:0 0 24px;}
+
+  /* Cards */
+  .card{
+    background:var(--paper); border:1px solid var(--line); border-radius:16px;
+    padding:22px 24px; margin-bottom:18px;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .card:hover{transform:translateY(-2px); box-shadow:0 14px 30px -16px rgba(31,36,33,.3);}
+  .card-head{display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:6px;}
+  .card-head h3{margin:0; font-size:20px; font-weight:700; color:var(--ink);}
+  .tag{
+    font-family:'JetBrains Mono', monospace; direction:ltr;
+    font-size:14px; font-weight:700; color:#fff; background:var(--accent);
+    padding:3px 10px; border-radius:7px;
+  }
+  .status{
+    font-size:12px; font-weight:700; padding:3px 10px; border-radius:999px;
+    margin-inline-start:auto;
+  }
+  .s-ok{color:var(--ok); background:var(--ok-bg);}
+  .s-dep{color:var(--dep); background:var(--dep-bg);}
+  .s-draft{color:var(--draft); background:var(--draft-bg);}
+  .s-aban{color:var(--aban); background:var(--aban-bg);}
+  .card p{margin:8px 0 0;}
+
+  /* Inline English / code terms */
+  .en{
+    unicode-bidi:isolate; direction:ltr;
+    font-family:'JetBrains Mono', monospace; font-size:.9em;
+    background:var(--accent-soft); color:var(--accent);
+    padding:1px 7px; border-radius:6px; font-weight:500;
+  }
+
+  /* Code blocks (forced LTR) */
+  .code-label{
+    direction:ltr; display:inline-block; font-family:'JetBrains Mono', monospace;
+    font-size:13px; color:var(--muted); margin:14px 0 6px; letter-spacing:.5px;
+  }
+  pre{
+    direction:ltr; text-align:left; unicode-bidi:isolate;
+    background:var(--code-bg); color:var(--code-ink);
+    font-family:'JetBrains Mono', monospace; font-size:14.5px; line-height:1.7;
+    padding:20px 22px; border-radius:12px; overflow-x:auto; margin:0;
+    box-shadow:0 10px 30px -14px rgba(31,36,33,.4);
+    border:1px solid rgba(255,255,255,.06);
+  }
+  pre .c-com{color:var(--code-com); font-style:italic;}
+  pre .c-key{color:var(--code-key);}
+  pre .c-str{color:var(--code-str);}
+  pre .c-php{color:var(--php);}
+
+  /* TOC count chip */
+  .count{
+    display:inline-block; background:var(--accent); color:#fff; font-weight:700;
+    font-size:14px; padding:2px 10px; border-radius:999px; margin-inline-start:8px;
+  }
+
+  .callout{background:var(--accent-soft); border-radius:16px; padding:24px 26px; margin-top:44px;}
+  .callout .group-title{border:none; padding:0; margin-bottom:12px;}
+  .callout p{margin:0 0 12px;}
+  .callout p:last-child{margin:0;}
+
+  footer{
+    margin-top:60px; padding-top:24px; border-top:2px solid var(--line);
+    color:var(--muted); font-size:15px; text-align:center;
+  }
+  footer a{color:var(--accent);}
+
+  /* ===== شريط علوي للموقع (مضاف من مركز المقالات — لا يؤثر على محتوى المقال) ===== */
+  .site-topbar{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:12px 24px;
+    background:rgba(244,241,234,.85); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .site-topbar a{text-decoration:none;}
+  .site-topbar .tb-home{
+    font-family:'Tajawal', sans-serif; font-size:16px; font-weight:700;
+    color:var(--ink); display:inline-flex; align-items:center; gap:7px;
+    transition:color .2s ease;
+  }
+  .site-topbar .tb-home:hover{color:var(--accent);}
+  .site-topbar .tb-lang{
+    font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700;
+    color:var(--accent); background:var(--accent-soft);
+    padding:6px 14px; border-radius:999px;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .site-topbar .tb-lang:hover{transform:translateY(-1px); box-shadow:0 8px 18px -10px rgba(138,75,45,.6);}
+</style>
+</head>
+<body>
+
+<!-- شريط علوي: العودة للرئيسية + الانتقال للنسخة بلغة أخرى -->
+<nav class="site-topbar">
+  <a class="tb-home" href="../../index.html">← الرئيسية</a>
+  <a class="tb-lang" href="en.html" lang="en">EN</a>
+</nav>
+
+<div class="wrap">
+
+  <header>
+    <span class="kicker">PHP · الدليل الكامل</span>
+    <h1>دليل معايير ال <span class="en">PSR</span></h1>
+    <p class="sub">شرح مبسّط لجميع معايير <strong>PHP Standards Recommendations</strong> مع أمثلة عملية، مرتّبة حسب الحالة.</p>
+    <div class="legend">
+      <span class="lg-ok">● معتمد (Accepted)</span>
+      <span class="lg-dep">● مهجور/قديم (Deprecated)</span>
+      <span class="lg-draft">● مسوّدة (Draft)</span>
+      <span class="lg-aban">● متروك (Abandoned)</span>
+    </div>
+  </header>
+
+  <!-- ===================== ACCEPTED ===================== -->
+  <section>
+    <h2 class="group-title">المعايير المعتمدة <span class="count">14</span></h2>
+    <p class="group-desc">هذه هي المعايير الفعّالة والموصى باستخدامها في المشاريع الحديثة.</p>
+
+    <!-- PSR-1 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-1</span><h3>المعيار الأساسي للكود</h3><span class="status s-ok">معتمد</span></div>
+      <p>قواعد أساسية: تسمية الكلاسات بأسلوب <span class="en">StudlyCaps</span>، والدوال بـ <span class="en">camelCase</span>، والثوابت بأحرف كبيرة.</p>
+      <span class="code-label">basics.php</span>
+<pre><span class="c-key">class</span> <span class="c-php">UserProfile</span> {        <span class="c-com">// StudlyCaps</span>
+    <span class="c-key">const</span> MAX_AGE = <span class="c-str">120</span>;     <span class="c-com">// UPPER_CASE</span>
+    <span class="c-key">public function</span> getName() {} <span class="c-com">// camelCase</span>
+}</pre>
+    </div>
+
+    <!-- PSR-3 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-3</span><h3>واجهة التسجيل (Logger)</h3><span class="status s-ok">معتمد</span></div>
+      <p>واجهة موحّدة لكتابة سجلات الأحداث والأخطاء بمستويات مختلفة، بحيث يمكنك تبديل مكتبة التسجيل دون تغيير كودك.</p>
+      <span class="code-label">logger.php</span>
+<pre><span class="c-php">$logger</span>-><span class="c-key">info</span>(<span class="c-str">'تم تسجيل دخول المستخدم'</span>);
+<span class="c-php">$logger</span>-><span class="c-key">error</span>(<span class="c-str">'فشل الاتصال بقاعدة البيانات'</span>);
+<span class="c-php">$logger</span>-><span class="c-key">warning</span>(<span class="c-str">'مساحة التخزين منخفضة'</span>);</pre>
+    </div>
+
+    <!-- PSR-4 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-4</span><h3>التحميل التلقائي (Autoloading)</h3><span class="status s-ok">معتمد</span></div>
+      <p>يربط اسم الكلاس بمسار الملف تلقائياً، فلا تحتاج <span class="en">require</span> يدوياً. هذا أساس عمل <span class="en">Composer</span>.</p>
+      <span class="code-label">autoload.php</span>
+<pre><span class="c-com">// الكلاس:</span>
+<span class="c-key">namespace</span> App\Models;
+<span class="c-key">class</span> <span class="c-php">User</span> {}
+
+<span class="c-com">// المسار المتوقّع للملف:</span>
+<span class="c-com">// src/Models/User.php</span></pre>
+    </div>
+
+    <!-- PSR-6 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-6</span><h3>واجهة التخزين المؤقت (Cache)</h3><span class="status s-ok">معتمد</span></div>
+      <p>نظام تخزين مؤقت متقدّم يعتمد على «مجمّع» <span class="en">Pool</span> و«عناصر» <span class="en">Item</span>، يمنحك تحكّماً دقيقاً.</p>
+      <span class="code-label">cache-pool.php</span>
+<pre><span class="c-php">$item</span> = <span class="c-php">$pool</span>-><span class="c-key">getItem</span>(<span class="c-str">'user_42'</span>);
+<span class="c-key">if</span> (!<span class="c-php">$item</span>-><span class="c-key">isHit</span>()) {
+    <span class="c-php">$item</span>-><span class="c-key">set</span>(<span class="c-php">$userData</span>);
+    <span class="c-php">$pool</span>-><span class="c-key">save</span>(<span class="c-php">$item</span>);
+}</pre>
+    </div>
+
+    <!-- PSR-7 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-7</span><h3>رسائل HTTP</h3><span class="status s-ok">معتمد</span></div>
+      <p>يوحّد تمثيل طلبات واستجابات <span class="en">HTTP</span> ككائنات. الرسائل غير قابلة للتغيير <span class="en">(immutable)</span>، ويُستخدم بكثرة في الـ <span class="en">APIs</span>.</p>
+      <span class="code-label">http-message.php</span>
+<pre><span class="c-php">$method</span> = <span class="c-php">$request</span>-><span class="c-key">getMethod</span>();      <span class="c-com">// "GET"</span>
+<span class="c-php">$path</span>   = <span class="c-php">$request</span>-><span class="c-key">getUri</span>()-><span class="c-key">getPath</span>();
+<span class="c-php">$code</span>   = <span class="c-php">$response</span>-><span class="c-key">getStatusCode</span>();  <span class="c-com">// 200</span></pre>
+    </div>
+
+    <!-- PSR-11 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-11</span><h3>واجهة الحاوية (Container)</h3><span class="status s-ok">معتمد</span></div>
+      <p>واجهة موحّدة لحاويات حقن التبعيات <span class="en">(DI Container)</span> لجلب الخدمات والكائنات.</p>
+      <span class="code-label">container.php</span>
+<pre><span class="c-key">if</span> (<span class="c-php">$container</span>-><span class="c-key">has</span>(<span class="c-str">'mailer'</span>)) {
+    <span class="c-php">$mailer</span> = <span class="c-php">$container</span>-><span class="c-key">get</span>(<span class="c-str">'mailer'</span>);
+}</pre>
+    </div>
+
+    <!-- PSR-12 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-12</span><h3>نمط الكود الموسّع</h3><span class="status s-ok">معتمد</span></div>
+      <p>تفاصيل التنسيق الكاملة: ٤ مسافات للإزاحة، أماكن الأقواس، المسافات. يحل محل <span class="en">PSR-2</span> القديم.</p>
+      <span class="code-label">style.php</span>
+<pre><span class="c-key">class</span> <span class="c-php">User</span>
+{
+    <span class="c-key">public function</span> getName(): <span class="c-key">string</span>
+    {
+        <span class="c-key">return</span> <span class="c-php">$this</span>->name;
+    }
+}</pre>
+    </div>
+
+    <!-- PSR-13 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-13</span><h3>روابط الوسائط (Hypermedia Links)</h3><span class="status s-ok">معتمد</span></div>
+      <p>طريقة موحّدة لتمثيل الروابط في الـ <span class="en">APIs</span> (مثل <span class="en">HATEOAS</span>)، يحمل كل رابط عنوانه وعلاقته.</p>
+      <span class="code-label">links.php</span>
+<pre><span class="c-php">$link</span>-><span class="c-key">getHref</span>();  <span class="c-com">// "/users/42"</span>
+<span class="c-php">$link</span>-><span class="c-key">getRel</span>();   <span class="c-com">// "self" أو "next"</span></pre>
+    </div>
+
+    <!-- PSR-14 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-14</span><h3>موزّع الأحداث (Event Dispatcher)</h3><span class="status s-ok">معتمد</span></div>
+      <p>نظام موحّد للأحداث: تُطلق حدثاً، فتستجيب له «المستمعات» <span class="en">(Listeners)</span> المسجّلة.</p>
+      <span class="code-label">events.php</span>
+<pre><span class="c-com">// إطلاق حدث بعد تسجيل مستخدم جديد</span>
+<span class="c-php">$dispatcher</span>-><span class="c-key">dispatch</span>(<span class="c-key">new</span> <span class="c-php">UserRegistered</span>(<span class="c-php">$user</span>));</pre>
+    </div>
+
+    <!-- PSR-15 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-15</span><h3>معالِجات HTTP (Middleware)</h3><span class="status s-ok">معتمد</span></div>
+      <p>يوحّد كتابة الطبقات الوسيطة <span class="en">(Middleware)</span> التي تعالج الطلب قبل وصوله للوجهة (مثل التحقق من المصادقة).</p>
+      <span class="code-label">middleware.php</span>
+<pre><span class="c-key">public function</span> <span class="c-php">process</span>(<span class="c-php">$request</span>, <span class="c-php">$handler</span>)
+{
+    <span class="c-com">// تحقّق ثم مرّر الطلب للطبقة التالية</span>
+    <span class="c-key">return</span> <span class="c-php">$handler</span>-><span class="c-key">handle</span>(<span class="c-php">$request</span>);
+}</pre>
+    </div>
+
+    <!-- PSR-16 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-16</span><h3>التخزين المؤقت المبسّط (Simple Cache)</h3><span class="status s-ok">معتمد</span></div>
+      <p>نسخة أبسط من <span class="en">PSR-6</span> بواجهة مباشرة <span class="en">get/set</span>، مناسبة للاستخدامات اليومية.</p>
+      <span class="code-label">simple-cache.php</span>
+<pre><span class="c-php">$cache</span>-><span class="c-key">set</span>(<span class="c-str">'key'</span>, <span class="c-php">$value</span>, <span class="c-str">3600</span>); <span class="c-com">// لمدة ساعة</span>
+<span class="c-php">$value</span> = <span class="c-php">$cache</span>-><span class="c-key">get</span>(<span class="c-str">'key'</span>, <span class="c-php">$default</span>);</pre>
+    </div>
+
+    <!-- PSR-17 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-17</span><h3>مصانع HTTP (Factories)</h3><span class="status s-ok">معتمد</span></div>
+      <p>واجهات موحّدة لإنشاء كائنات <span class="en">PSR-7</span> (طلبات، استجابات، عناوين) بطريقة معيارية.</p>
+      <span class="code-label">factories.php</span>
+<pre><span class="c-php">$request</span> = <span class="c-php">$factory</span>-><span class="c-key">createRequest</span>(
+    <span class="c-str">'GET'</span>, <span class="c-str">'https://api.example.com'</span>
+);</pre>
+    </div>
+
+    <!-- PSR-18 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-18</span><h3>عميل HTTP (Client)</h3><span class="status s-ok">معتمد</span></div>
+      <p>واجهة موحّدة لإرسال طلبات <span class="en">HTTP</span> واستقبال الردود، فيمكنك تبديل مكتبة الاتصال دون تغيير كودك.</p>
+      <span class="code-label">http-client.php</span>
+<pre><span class="c-php">$response</span> = <span class="c-php">$client</span>-><span class="c-key">sendRequest</span>(<span class="c-php">$request</span>);
+<span class="c-key">echo</span> <span class="c-php">$response</span>-><span class="c-key">getStatusCode</span>(); <span class="c-com">// 200</span></pre>
+    </div>
+
+    <!-- PSR-20 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-20</span><h3>الساعة (Clock)</h3><span class="status s-ok">معتمد</span></div>
+      <p>واجهة موحّدة للحصول على الوقت الحالي، ما يسهّل اختبار الكود بتزييف الوقت <span class="en">(mocking)</span>.</p>
+      <span class="code-label">clock.php</span>
+<pre><span class="c-php">$now</span> = <span class="c-php">$clock</span>-><span class="c-key">now</span>(); <span class="c-com">// DateTimeImmutable</span></pre>
+    </div>
+  </section>
+
+  <!-- ===================== DEPRECATED ===================== -->
+  <section>
+    <h2 class="group-title">معايير قديمة / مهجورة <span class="count">2</span></h2>
+    <p class="group-desc">كانت معتمدة سابقاً لكنها استُبدلت بمعايير أحدث. لا تُستخدم في المشاريع الجديدة.</p>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-0</span><h3>التحميل التلقائي (القديم)</h3><span class="status s-dep">مهجور</span></div>
+      <p>أول معيار للتحميل التلقائي، اعتمد على الشرطة السفلية في أسماء الكلاسات. <strong>استُبدل بـ <span class="en">PSR-4</span></strong> الأبسط والأنظف.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-2</span><h3>دليل نمط الكود (القديم)</h3><span class="status s-dep">مهجور</span></div>
+      <p>المعيار الأصلي لتنسيق الكود. <strong>استُبدل بـ <span class="en">PSR-12</span></strong> الذي وسّعه وأضاف قواعد لميزات PHP الحديثة.</p>
+    </div>
+  </section>
+
+  <!-- ===================== DRAFT ===================== -->
+  <section>
+    <h2 class="group-title">معايير قيد الإعداد (مسوّدات) <span class="count">4</span></h2>
+    <p class="group-desc">قيد المناقشة والتطوير، وقد تتغيّر قبل اعتمادها. ليست جاهزة للاعتماد عليها بعد.</p>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-5</span><h3>معيار PHPDoc</h3><span class="status s-draft">مسوّدة</span></div>
+      <p>توحيد طريقة كتابة تعليقات التوثيق <span class="en">(DocBlocks)</span> فوق الدوال والكلاسات.</p>
+      <span class="code-label">phpdoc.php</span>
+<pre><span class="c-com">/**
+ * @param  int   $id
+ * @return User
+ */</span></pre>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-19</span><h3>وسوم PHPDoc</h3><span class="status s-draft">مسوّدة</span></div>
+      <p>مكمّل لـ <span class="en">PSR-5</span>، يحدّد قائمة الوسوم القياسية مثل <span class="en">@param</span> و <span class="en">@return</span> و <span class="en">@throws</span>.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-21</span><h3>التدويل (Internationalization)</h3><span class="status s-draft">مسوّدة</span></div>
+      <p>واجهة موحّدة للترجمة وتعدّد اللغات والصيغ المحلية (التواريخ والأرقام والعملات).</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-22</span><h3>تتبّع التطبيقات (Tracing)</h3><span class="status s-draft">مسوّدة</span></div>
+      <p>واجهة موحّدة لتتبّع أداء التطبيق ومراقبته <span class="en">(observability)</span> عبر مكوّناته المختلفة.</p>
+    </div>
+  </section>
+
+  <!-- ===================== ABANDONED ===================== -->
+  <section>
+    <h2 class="group-title">معايير متروكة <span class="count">3</span></h2>
+    <p class="group-desc">اقتُرحت لكنها لم تكتمل أو لم تحظَ بالموافقة، وتوقّف العمل عليها.</p>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-8</span><h3>واجهة العناق (Huggable)</h3><span class="status s-aban">متروك</span></div>
+      <p>اقتراح طريف (مزحة) لواجهة تجعل الكائنات «قابلة للعناق». لم يكن جدّياً ولم يُعتمد. 🙂</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-9</span><h3>الإفصاح عن الثغرات الأمنية</h3><span class="status s-aban">متروك</span></div>
+      <p>اقتراح لتوحيد طريقة الإعلان عن الثغرات الأمنية في المشاريع. لم يُكمَل.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-10</span><h3>عملية الإبلاغ عن الثغرات</h3><span class="status s-aban">متروك</span></div>
+      <p>مكمّل لـ <span class="en">PSR-9</span>، يحدّد كيفية استقبال بلاغات الثغرات ومعالجتها. لم يُكمَل أيضاً.</p>
+    </div>
+  </section>
+
+  <!-- ===================== SUMMARY ===================== -->
+  <div class="callout">
+    <h2 class="group-title">باختصار</h2>
+    <p>إجمالاً تم ترقيم المعايير من <span class="en">PSR-0</span> حتى <span class="en">PSR-22</span>: منها <strong>١٤ معتمداً</strong> وفعّالاً، و<strong>٢ مهجوران</strong> (استُبدلا بأحدث)، و<strong>٤ مسوّدات</strong> قيد العمل، و<strong>٣ متروكة</strong>.</p>
+    <p>ال PSR ليست قواعد إجبارية يفرضها مترجم PHP، بل <strong>اتفاقيات</strong> يلتزم بها المجتمع طوعاً — والالتزام بها يجعل مشروعك احترافياً ومتوافقاً مع المكتبات والفريموركات الكبيرة.</p>
+  </div>
+
+  <footer>
+    المصدر الرسمي والمحدّث دائماً: <a href="https://www.php-fig.org/psr/">php-fig.org/psr</a>
+  </footer>
+
+</div>
+</body>
+</html>

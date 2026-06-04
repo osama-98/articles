@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://osama-98.github.io/articles/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://osama-98.github.io/articles/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://osama-98.github.io/articles/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://osama-98.github.io/articles/"/>
+  </url>
+
+  <!-- PSR Standards — English + Arabic -->
+  <url>
+    <loc>https://osama-98.github.io/articles/articles/psr-standards/en.html</loc>
+    <lastmod>2026-06-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://osama-98.github.io/articles/articles/psr-standards/en.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://osama-98.github.io/articles/articles/psr-standards/ar.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://osama-98.github.io/articles/articles/psr-standards/en.html"/>
+  </url>
+  <url>
+    <loc>https://osama-98.github.io/articles/articles/psr-standards/ar.html</loc>
+    <lastmod>2026-06-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://osama-98.github.io/articles/articles/psr-standards/ar.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://osama-98.github.io/articles/articles/psr-standards/en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://osama-98.github.io/articles/articles/psr-standards/en.html"/>
+  </url>
+
+</urlset>

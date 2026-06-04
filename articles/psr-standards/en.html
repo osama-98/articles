@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ===================== SEO ===================== -->
+<!-- NOTE: replace USERNAME below with your GitHub username/repo once Pages is live. -->
+<title>The Complete Guide to PHP PSR Standards (PSR-0 to PSR-22)</title>
+<meta name="description" content="A simple, example-driven walkthrough of every PHP Standards Recommendation (PSR) — accepted, deprecated, draft, and abandoned — from PSR-0 to PSR-22.">
+<meta name="author" content="Articles">
+<meta name="keywords" content="PHP, PSR, PSR standards, PHP-FIG, PSR-4, PSR-12, autoloading, coding standards">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#8a4b2d">
+<link rel="canonical" href="https://osama-98.github.io/articles/articles/psr-standards/en.html">
+
+<!-- Language alternates: English ⇄ Arabic versions of this same article -->
+<link rel="alternate" hreflang="en" href="https://osama-98.github.io/articles/articles/psr-standards/en.html">
+<link rel="alternate" hreflang="ar" href="https://osama-98.github.io/articles/articles/psr-standards/ar.html">
+<link rel="alternate" hreflang="x-default" href="https://osama-98.github.io/articles/articles/psr-standards/en.html">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Articles">
+<meta property="og:title" content="The Complete Guide to PHP PSR Standards">
+<meta property="og:description" content="A simple, example-driven walkthrough of every PHP Standards Recommendation, from PSR-0 to PSR-22.">
+<meta property="og:url" content="https://osama-98.github.io/articles/articles/psr-standards/en.html">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ar_AR">
+<meta property="article:published_time" content="2026-06-04">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="Standards">
+
+<!-- Twitter card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Complete Guide to PHP PSR Standards">
+<meta name="twitter:description" content="A simple, example-driven walkthrough of every PHP Standards Recommendation, from PSR-0 to PSR-22.">
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "The Complete Guide to PHP PSR Standards",
+  "description": "A simple, example-driven walkthrough of every PHP Standards Recommendation, from PSR-0 to PSR-22.",
+  "inLanguage": "en",
+  "datePublished": "2026-06-04",
+  "author": { "@type": "Organization", "name": "Articles" },
+  "publisher": { "@type": "Organization", "name": "Articles" },
+  "mainEntityOfPage": "https://osama-98.github.io/articles/articles/psr-standards/en.html",
+  "keywords": "PHP, PSR, PHP-FIG, coding standards, autoloading"
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f1ea;
+    --paper:#fffdf8;
+    --ink:#1f2421;
+    --muted:#5c6660;
+    --accent:#8a4b2d;
+    --accent-soft:#e8d9cd;
+    --line:#e3ddd1;
+    --code-bg:#1f2421;
+    --code-ink:#f4f1ea;
+    --code-key:#e0a458;
+    --code-str:#9bbf8a;
+    --code-com:#7b857f;
+    --php:#6c7eb7;
+    --ok:#4f7a44;
+    --ok-bg:#e1ecdb;
+    --dep:#a3473b;
+    --dep-bg:#f0ddd9;
+    --draft:#3f6699;
+    --draft-bg:#dbe5f0;
+    --aban:#6b6b6b;
+    --aban-bg:#e6e4df;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 85% -5%, rgba(138,75,45,.07), transparent 45%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.7;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:820px; margin:0 auto; padding:64px 24px 96px;}
+
+  /* Header */
+  header{margin-bottom:40px; border-bottom:2px solid var(--line); padding-bottom:32px;}
+  .kicker{
+    display:inline-block; font-size:13px; font-weight:700; letter-spacing:1.5px;
+    text-transform:uppercase; color:var(--accent); background:var(--accent-soft);
+    padding:6px 14px; border-radius:999px; margin-bottom:22px;
+  }
+  h1{
+    font-family:'Fraunces', serif; font-size:clamp(38px,7vw,60px);
+    font-weight:800; margin:0 0 14px; line-height:1.1; letter-spacing:-1px;
+  }
+  .sub{color:var(--muted); font-size:19px; margin:0; max-width:58ch;}
+
+  /* Legend */
+  .legend{display:flex; flex-wrap:wrap; gap:10px; margin:28px 0 4px;}
+  .legend span{font-size:13px; font-weight:600; padding:5px 12px; border-radius:999px;}
+  .lg-ok{color:var(--ok); background:var(--ok-bg);}
+  .lg-dep{color:var(--dep); background:var(--dep-bg);}
+  .lg-draft{color:var(--draft); background:var(--draft-bg);}
+  .lg-aban{color:var(--aban); background:var(--aban-bg);}
+
+  /* Sections */
+  section{margin-top:54px;}
+  .group-title{
+    font-family:'Fraunces', serif; font-size:30px; font-weight:800;
+    margin:0 0 6px; line-height:1.2; padding-left:16px;
+    border-left:5px solid var(--accent);
+  }
+  .group-desc{color:var(--muted); font-size:16px; margin:0 0 24px;}
+
+  /* Cards */
+  .card{
+    background:var(--paper); border:1px solid var(--line); border-radius:16px;
+    padding:22px 24px; margin-bottom:18px;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .card:hover{transform:translateY(-2px); box-shadow:0 14px 30px -16px rgba(31,36,33,.3);}
+  .card-head{display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:6px;}
+  .card-head h3{
+    margin:0; font-family:'Fraunces', serif; font-size:21px;
+    font-weight:600; color:var(--ink);
+  }
+  .tag{
+    font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700;
+    color:#fff; background:var(--accent); padding:3px 10px; border-radius:7px;
+  }
+  .status{font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase;
+    padding:3px 10px; border-radius:999px; margin-left:auto;}
+  .s-ok{color:var(--ok); background:var(--ok-bg);}
+  .s-dep{color:var(--dep); background:var(--dep-bg);}
+  .s-draft{color:var(--draft); background:var(--draft-bg);}
+  .s-aban{color:var(--aban); background:var(--aban-bg);}
+  .card p{margin:8px 0 0;}
+
+  /* Inline code term */
+  .en{
+    font-family:'JetBrains Mono', monospace; font-size:.88em;
+    background:var(--accent-soft); color:var(--accent);
+    padding:1px 7px; border-radius:6px; font-weight:500;
+  }
+
+  /* Code blocks */
+  .code-label{
+    display:inline-block; font-family:'JetBrains Mono', monospace;
+    font-size:13px; color:var(--muted); margin:14px 0 6px; letter-spacing:.5px;
+  }
+  pre{
+    background:var(--code-bg); color:var(--code-ink);
+    font-family:'JetBrains Mono', monospace; font-size:14.5px; line-height:1.7;
+    padding:20px 22px; border-radius:12px; overflow-x:auto; margin:0;
+    box-shadow:0 10px 30px -14px rgba(31,36,33,.4);
+    border:1px solid rgba(255,255,255,.06);
+  }
+  pre .c-com{color:var(--code-com); font-style:italic;}
+  pre .c-key{color:var(--code-key);}
+  pre .c-str{color:var(--code-str);}
+  pre .c-php{color:var(--php);}
+
+  .count{
+    display:inline-block; background:var(--accent); color:#fff; font-weight:700;
+    font-size:14px; padding:2px 11px; border-radius:999px; margin-left:8px;
+    font-family:'Inter', sans-serif; vertical-align:middle;
+  }
+
+  .callout{background:var(--accent-soft); border-radius:16px; padding:26px 28px; margin-top:46px;}
+  .callout .group-title{border:none; padding:0; margin-bottom:12px;}
+  .callout p{margin:0 0 12px;}
+  .callout p:last-child{margin:0;}
+
+  footer{
+    margin-top:60px; padding-top:24px; border-top:2px solid var(--line);
+    color:var(--muted); font-size:15px; text-align:center;
+  }
+  footer a{color:var(--accent);}
+
+  /* ===== Site top bar (added by the articles hub — does not affect article body) ===== */
+  .site-topbar{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:12px 24px;
+    background:rgba(244,241,234,.85); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .site-topbar a{text-decoration:none;}
+  .site-topbar .tb-home{
+    font-family:'Inter', sans-serif; font-size:15px; font-weight:600;
+    color:var(--ink); display:inline-flex; align-items:center; gap:7px;
+    transition:color .2s ease;
+  }
+  .site-topbar .tb-home:hover{color:var(--accent);}
+  .site-topbar .tb-lang{
+    font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700;
+    color:var(--accent); background:var(--accent-soft);
+    padding:6px 14px; border-radius:999px;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .site-topbar .tb-lang:hover{transform:translateY(-1px); box-shadow:0 8px 18px -10px rgba(138,75,45,.6);}
+</style>
+</head>
+<body>
+
+<!-- Site top bar: back to hub + jump to the other language version -->
+<nav class="site-topbar">
+  <a class="tb-home" href="../../index.html">← Home</a>
+  <a class="tb-lang" href="ar.html" lang="ar">عربي</a>
+</nav>
+
+<div class="wrap">
+
+  <header>
+    <span class="kicker">PHP · The Complete Guide</span>
+    <h1>PSR Standards Explained</h1>
+    <p class="sub">A simple walkthrough of every <strong>PHP Standards Recommendation</strong> with practical examples, organized by status.</p>
+    <div class="legend">
+      <span class="lg-ok">● Accepted</span>
+      <span class="lg-dep">● Deprecated</span>
+      <span class="lg-draft">● Draft</span>
+      <span class="lg-aban">● Abandoned</span>
+    </div>
+  </header>
+
+  <!-- ===================== ACCEPTED ===================== -->
+  <section>
+    <h2 class="group-title">Accepted Standards <span class="count">14</span></h2>
+    <p class="group-desc">These are the active, recommended standards used in modern projects.</p>
+
+    <!-- PSR-1 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-1</span><h3>Basic Coding Standard</h3><span class="status s-ok">Accepted</span></div>
+      <p>Fundamental rules: name classes in <span class="en">StudlyCaps</span>, methods in <span class="en">camelCase</span>, and constants in <span class="en">UPPER_CASE</span>.</p>
+      <span class="code-label">basics.php</span>
+<pre><span class="c-key">class</span> <span class="c-php">UserProfile</span> {        <span class="c-com">// StudlyCaps</span>
+    <span class="c-key">const</span> MAX_AGE = <span class="c-str">120</span>;     <span class="c-com">// UPPER_CASE</span>
+    <span class="c-key">public function</span> getName() {} <span class="c-com">// camelCase</span>
+}</pre>
+    </div>
+
+    <!-- PSR-3 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-3</span><h3>Logger Interface</h3><span class="status s-ok">Accepted</span></div>
+      <p>A unified interface for logging events and errors at different severity levels, so you can swap logging libraries without changing your code.</p>
+      <span class="code-label">logger.php</span>
+<pre><span class="c-php">$logger</span>-><span class="c-key">info</span>(<span class="c-str">'User logged in'</span>);
+<span class="c-php">$logger</span>-><span class="c-key">error</span>(<span class="c-str">'Database connection failed'</span>);
+<span class="c-php">$logger</span>-><span class="c-key">warning</span>(<span class="c-str">'Storage running low'</span>);</pre>
+    </div>
+
+    <!-- PSR-4 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-4</span><h3>Autoloading Standard</h3><span class="status s-ok">Accepted</span></div>
+      <p>Maps a class name to a file path automatically, so you never write <span class="en">require</span> by hand. This is the foundation of <span class="en">Composer</span>.</p>
+      <span class="code-label">autoload.php</span>
+<pre><span class="c-com">// The class:</span>
+<span class="c-key">namespace</span> App\Models;
+<span class="c-key">class</span> <span class="c-php">User</span> {}
+
+<span class="c-com">// Expected file location:</span>
+<span class="c-com">// src/Models/User.php</span></pre>
+    </div>
+
+    <!-- PSR-6 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-6</span><h3>Caching Interface</h3><span class="status s-ok">Accepted</span></div>
+      <p>An advanced caching system built around a <span class="en">Pool</span> and <span class="en">Item</span> objects, giving you fine-grained control.</p>
+      <span class="code-label">cache-pool.php</span>
+<pre><span class="c-php">$item</span> = <span class="c-php">$pool</span>-><span class="c-key">getItem</span>(<span class="c-str">'user_42'</span>);
+<span class="c-key">if</span> (!<span class="c-php">$item</span>-><span class="c-key">isHit</span>()) {
+    <span class="c-php">$item</span>-><span class="c-key">set</span>(<span class="c-php">$userData</span>);
+    <span class="c-php">$pool</span>-><span class="c-key">save</span>(<span class="c-php">$item</span>);
+}</pre>
+    </div>
+
+    <!-- PSR-7 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-7</span><h3>HTTP Message Interface</h3><span class="status s-ok">Accepted</span></div>
+      <p>Represents HTTP requests and responses as objects. Messages are <span class="en">immutable</span>, and it's used heavily when building APIs.</p>
+      <span class="code-label">http-message.php</span>
+<pre><span class="c-php">$method</span> = <span class="c-php">$request</span>-><span class="c-key">getMethod</span>();      <span class="c-com">// "GET"</span>
+<span class="c-php">$path</span>   = <span class="c-php">$request</span>-><span class="c-key">getUri</span>()-><span class="c-key">getPath</span>();
+<span class="c-php">$code</span>   = <span class="c-php">$response</span>-><span class="c-key">getStatusCode</span>();  <span class="c-com">// 200</span></pre>
+    </div>
+
+    <!-- PSR-11 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-11</span><h3>Container Interface</h3><span class="status s-ok">Accepted</span></div>
+      <p>A unified interface for dependency-injection containers <span class="en">(DI Container)</span> to fetch services and objects.</p>
+      <span class="code-label">container.php</span>
+<pre><span class="c-key">if</span> (<span class="c-php">$container</span>-><span class="c-key">has</span>(<span class="c-str">'mailer'</span>)) {
+    <span class="c-php">$mailer</span> = <span class="c-php">$container</span>-><span class="c-key">get</span>(<span class="c-str">'mailer'</span>);
+}</pre>
+    </div>
+
+    <!-- PSR-12 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-12</span><h3>Extended Coding Style Guide</h3><span class="status s-ok">Accepted</span></div>
+      <p>The full formatting spec: 4-space indentation, brace placement, spacing. It replaces the older <span class="en">PSR-2</span>.</p>
+      <span class="code-label">style.php</span>
+<pre><span class="c-key">class</span> <span class="c-php">User</span>
+{
+    <span class="c-key">public function</span> getName(): <span class="c-key">string</span>
+    {
+        <span class="c-key">return</span> <span class="c-php">$this</span>->name;
+    }
+}</pre>
+    </div>
+
+    <!-- PSR-13 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-13</span><h3>Hypermedia Links</h3><span class="status s-ok">Accepted</span></div>
+      <p>A standard way to represent links in APIs (such as <span class="en">HATEOAS</span>), where each link carries its target and relationship.</p>
+      <span class="code-label">links.php</span>
+<pre><span class="c-php">$link</span>-><span class="c-key">getHref</span>();  <span class="c-com">// "/users/42"</span>
+<span class="c-php">$link</span>-><span class="c-key">getRel</span>();   <span class="c-com">// "self" or "next"</span></pre>
+    </div>
+
+    <!-- PSR-14 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-14</span><h3>Event Dispatcher</h3><span class="status s-ok">Accepted</span></div>
+      <p>A unified event system: you dispatch an event, and the registered <span class="en">Listeners</span> respond to it.</p>
+      <span class="code-label">events.php</span>
+<pre><span class="c-com">// Fire an event after a new user registers</span>
+<span class="c-php">$dispatcher</span>-><span class="c-key">dispatch</span>(<span class="c-key">new</span> <span class="c-php">UserRegistered</span>(<span class="c-php">$user</span>));</pre>
+    </div>
+
+    <!-- PSR-15 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-15</span><h3>HTTP Handlers (Middleware)</h3><span class="status s-ok">Accepted</span></div>
+      <p>Standardizes writing <span class="en">Middleware</span> — layers that process a request before it reaches its destination (e.g. authentication checks).</p>
+      <span class="code-label">middleware.php</span>
+<pre><span class="c-key">public function</span> <span class="c-php">process</span>(<span class="c-php">$request</span>, <span class="c-php">$handler</span>)
+{
+    <span class="c-com">// validate, then pass to the next layer</span>
+    <span class="c-key">return</span> <span class="c-php">$handler</span>-><span class="c-key">handle</span>(<span class="c-php">$request</span>);
+}</pre>
+    </div>
+
+    <!-- PSR-16 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-16</span><h3>Simple Cache</h3><span class="status s-ok">Accepted</span></div>
+      <p>A simpler take on <span class="en">PSR-6</span> with a direct <span class="en">get/set</span> interface, ideal for everyday use.</p>
+      <span class="code-label">simple-cache.php</span>
+<pre><span class="c-php">$cache</span>-><span class="c-key">set</span>(<span class="c-str">'key'</span>, <span class="c-php">$value</span>, <span class="c-str">3600</span>); <span class="c-com">// 1 hour TTL</span>
+<span class="c-php">$value</span> = <span class="c-php">$cache</span>-><span class="c-key">get</span>(<span class="c-str">'key'</span>, <span class="c-php">$default</span>);</pre>
+    </div>
+
+    <!-- PSR-17 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-17</span><h3>HTTP Factories</h3><span class="status s-ok">Accepted</span></div>
+      <p>Unified interfaces for creating <span class="en">PSR-7</span> objects (requests, responses, URIs) in a standard way.</p>
+      <span class="code-label">factories.php</span>
+<pre><span class="c-php">$request</span> = <span class="c-php">$factory</span>-><span class="c-key">createRequest</span>(
+    <span class="c-str">'GET'</span>, <span class="c-str">'https://api.example.com'</span>
+);</pre>
+    </div>
+
+    <!-- PSR-18 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-18</span><h3>HTTP Client</h3><span class="status s-ok">Accepted</span></div>
+      <p>A unified interface for sending HTTP requests and receiving responses, so you can swap the underlying client without touching your code.</p>
+      <span class="code-label">http-client.php</span>
+<pre><span class="c-php">$response</span> = <span class="c-php">$client</span>-><span class="c-key">sendRequest</span>(<span class="c-php">$request</span>);
+<span class="c-key">echo</span> <span class="c-php">$response</span>-><span class="c-key">getStatusCode</span>(); <span class="c-com">// 200</span></pre>
+    </div>
+
+    <!-- PSR-20 -->
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-20</span><h3>Clock</h3><span class="status s-ok">Accepted</span></div>
+      <p>A unified interface for getting the current time, which makes code easy to test by mocking the clock.</p>
+      <span class="code-label">clock.php</span>
+<pre><span class="c-php">$now</span> = <span class="c-php">$clock</span>-><span class="c-key">now</span>(); <span class="c-com">// DateTimeImmutable</span></pre>
+    </div>
+  </section>
+
+  <!-- ===================== DEPRECATED ===================== -->
+  <section>
+    <h2 class="group-title">Deprecated Standards <span class="count">2</span></h2>
+    <p class="group-desc">Once accepted, but replaced by newer standards. Don't use these in new projects.</p>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-0</span><h3>Autoloading Standard (old)</h3><span class="status s-dep">Deprecated</span></div>
+      <p>The first autoloading standard, which relied on underscores in class names. <strong>Replaced by <span class="en">PSR-4</span></strong>, which is simpler and cleaner.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-2</span><h3>Coding Style Guide (old)</h3><span class="status s-dep">Deprecated</span></div>
+      <p>The original code-formatting standard. <strong>Replaced by <span class="en">PSR-12</span></strong>, which extends it and adds rules for modern PHP features.</p>
+    </div>
+  </section>
+
+  <!-- ===================== DRAFT ===================== -->
+  <section>
+    <h2 class="group-title">In Progress (Drafts) <span class="count">4</span></h2>
+    <p class="group-desc">Still under discussion and development, and may change before acceptance. Not ready to rely on yet.</p>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-5</span><h3>PHPDoc Standard</h3><span class="status s-draft">Draft</span></div>
+      <p>Standardizes how documentation comments <span class="en">(DocBlocks)</span> are written above functions and classes.</p>
+      <span class="code-label">phpdoc.php</span>
+<pre><span class="c-com">/**
+ * @param  int   $id
+ * @return User
+ */</span></pre>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-19</span><h3>PHPDoc Tags</h3><span class="status s-draft">Draft</span></div>
+      <p>A companion to <span class="en">PSR-5</span> that defines the standard list of tags such as <span class="en">@param</span>, <span class="en">@return</span>, and <span class="en">@throws</span>.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-21</span><h3>Internationalization</h3><span class="status s-draft">Draft</span></div>
+      <p>A unified interface for translation, multi-language support, and locale formatting (dates, numbers, currencies).</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-22</span><h3>Application Tracing</h3><span class="status s-draft">Draft</span></div>
+      <p>A unified interface for tracing application performance and observability across its components.</p>
+    </div>
+  </section>
+
+  <!-- ===================== ABANDONED ===================== -->
+  <section>
+    <h2 class="group-title">Abandoned Standards <span class="count">3</span></h2>
+    <p class="group-desc">Proposed but never completed or approved; work on them has stopped.</p>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-8</span><h3>Huggable Interface</h3><span class="status s-aban">Abandoned</span></div>
+      <p>A tongue-in-cheek proposal for an interface that makes objects "huggable." It was never serious and never adopted. 🙂</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-9</span><h3>Security Advisories</h3><span class="status s-aban">Abandoned</span></div>
+      <p>A proposal to standardize how security vulnerabilities are announced across projects. Never completed.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="tag">PSR-10</span><h3>Security Reporting Process</h3><span class="status s-aban">Abandoned</span></div>
+      <p>A companion to <span class="en">PSR-9</span> defining how vulnerability reports are received and handled. Also never completed.</p>
+    </div>
+  </section>
+
+  <!-- ===================== SUMMARY ===================== -->
+  <div class="callout">
+    <h2 class="group-title">In Short</h2>
+    <p>Standards are numbered from <span class="en">PSR-0</span> to <span class="en">PSR-22</span>: of these, <strong>14 are accepted</strong> and active, <strong>2 are deprecated</strong> (replaced by newer ones), <strong>4 are drafts</strong> in progress, and <strong>3 were abandoned</strong>.</p>
+    <p>PSRs aren't hard rules enforced by the PHP engine — they're <strong>conventions</strong> the community follows voluntarily. Adopting them makes your project professional and interoperable with major libraries and frameworks.</p>
+  </div>
+
+  <footer>
+    Official, always up-to-date source: <a href="https://www.php-fig.org/psr/">php-fig.org/psr</a>
+  </footer>
+
+</div>
+</body>
+</html>
