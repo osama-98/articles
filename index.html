@@ -85,10 +85,19 @@
     </p>
   </section>
 
+  <!-- ===================== FILTERS ===================== -->
+  <section class="filters wrap" aria-label="Filter articles">
+    <input id="article-search" class="filters__search" type="search"
+           placeholder="Search articles by title, topic, or tag…" autocomplete="off">
+    <!-- Tag chips are injected here by assets/app.js -->
+    <div id="article-tags" class="filters__tags"></div>
+  </section>
+
   <!-- ===================== ARTICLE GRID ===================== -->
   <main class="wrap">
     <!-- Cards are injected here by assets/app.js from data/articles.json -->
     <div id="article-grid" class="grid" aria-live="polite"></div>
+    <p id="article-noresults" class="no-results" style="display:none;">No articles match your search.</p>
   </main>
 
   <!-- ===================== FOOTER ===================== -->

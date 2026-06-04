@@ -183,6 +183,43 @@ body{
 .site-footer__contact a:hover{opacity:.7; text-decoration:underline;}
 .site-footer__name{color:var(--ink); font-weight:700;}
 
+/* =========================== FILTERS =========================== */
+.filters{
+  display:flex; flex-direction:column; gap:16px;
+  padding:8px 24px 0;
+}
+.filters__search{
+  width:100%; font-family:var(--font-body); font-size:16px; color:var(--ink);
+  background:var(--paper); border:1px solid var(--line); border-radius:14px;
+  padding:14px 18px; outline:none;
+  transition:border-color .2s ease, box-shadow .2s ease;
+}
+[dir="rtl"] .filters__search{font-family:'Tajawal', sans-serif;}
+.filters__search:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-soft);
+}
+.filters__search::placeholder{color:var(--muted);}
+
+.filters__tags{display:flex; flex-wrap:wrap; gap:9px;}
+.f-chip{
+  font-family:var(--font-mono); font-size:13px; font-weight:600; cursor:pointer;
+  color:var(--muted); background:var(--paper); border:1px solid var(--line);
+  border-radius:999px; padding:6px 14px; transition:all .18s ease;
+}
+.f-chip:hover{border-color:var(--accent); color:var(--accent);}
+.f-chip.is-active{background:var(--accent); color:#fff; border-color:var(--accent);}
+
+/* Tag chips inside a card become clickable filters */
+.tag--btn{cursor:pointer; transition:filter .18s ease, box-shadow .18s ease;}
+.tag--btn:hover{filter:brightness(.97); box-shadow:0 0 0 2px var(--accent-soft);}
+.tag--btn.is-active{background:var(--accent); color:#fff;}
+
+.no-results{
+  color:var(--muted); font-style:italic; text-align:center;
+  padding:24px 0 80px;
+}
+
 /* =========================== MOBILE =========================== */
 @media (max-width:560px){
   .hero{padding:48px 24px 24px;}
