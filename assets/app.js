@@ -18,7 +18,7 @@
       brand: "Articles",
       kicker: "The Library",
       title: "Articles worth keeping.",
-      subtitle: "A small, curated collection of technical writing — readable in English and Arabic.",
+      subtitle: "A small, curated collection of technical writing.",
       footer: "Built as a static site · Hosted on GitHub Pages",
       readMore: "Read article",
       arrow: "→"
@@ -27,7 +27,7 @@
       brand: "مقالات",
       kicker: "المكتبة",
       title: "مقالات تستحق الاقتناء.",
-      subtitle: "مجموعة صغيرة ومنتقاة من الكتابات التقنية — متاحة بالعربية والإنجليزية.",
+      subtitle: "مجموعة صغيرة ومنتقاة من الكتابات التقنية.",
       footer: "موقع ثابت · مُستضاف على GitHub Pages",
       readMore: "اقرأ المقال",
       arrow: "←"
