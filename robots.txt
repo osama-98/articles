@@ -1,4 +1,4 @@
-# Allow all crawlers. Replace USERNAME with your GitHub username/repo.
+# Allow all crawlers.
 User-agent: *
 Allow: /
 
