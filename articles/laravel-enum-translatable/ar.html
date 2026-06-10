@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ===================== SEO ===================== -->
+<title>ترجمة الـEnums في Laravel (laravel-enum-translatable)</title>
+<meta name="description" content="توقّف عن كتابة الترجمات داخل الكود.  laravel-enum-translatable تضيف للـenums ترجمة كاملة و array helpers ومقارنة آمنة عبر traits متدرّجة.">
+<meta name="author" content="Articles">
+<meta name="keywords" content="laravel, php, enum, ترجمة, تعدد اللغات, متعدد اللغات, backed enum, laravel-enum-translatable, EnumTranslatable, توطين">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#8a4b2d">
+<link rel="canonical" href="https://osama-98.github.io/articles/articles/laravel-enum-translatable/ar.html">
+
+<!-- روابط اللغات -->
+<link rel="alternate" hreflang="ar" href="https://osama-98.github.io/articles/articles/laravel-enum-translatable/ar.html">
+<link rel="alternate" hreflang="en" href="https://osama-98.github.io/articles/articles/laravel-enum-translatable/en.html">
+<link rel="alternate" hreflang="x-default" href="https://osama-98.github.io/articles/articles/laravel-enum-translatable/en.html">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Articles">
+<meta property="og:title" content="ترجمة الـEnums في Laravel">
+<meta property="og:description" content="أضف للـenums في PHP ترجمة كاملة و array helpers ومقارنة آمنة عبر  laravel-enum-translatable.">
+<meta property="og:url" content="https://osama-98.github.io/articles/articles/laravel-enum-translatable/ar.html">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="article:published_time" content="2026-06-10">
+<meta property="article:tag" content="Laravel">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="i18n">
+
+<!-- Twitter card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ترجمة الـEnums في Laravel">
+<meta name="twitter:description" content="أضف للـenums في PHP ترجمة كاملة و array helpers ومقارنة آمنة عبر  laravel-enum-translatable.">
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "ترجمة الـEnums في Laravel",
+  "description": "أضف للـenums في PHP ترجمة كاملة و array helpers ومقارنة آمنة عبر  laravel-enum-translatable.",
+  "inLanguage": "ar",
+  "datePublished": "2026-06-10",
+  "author": { "@type": "Organization", "name": "Articles" },
+  "publisher": { "@type": "Organization", "name": "Articles" },
+  "mainEntityOfPage": "https://osama-98.github.io/articles/articles/laravel-enum-translatable/ar.html",
+  "keywords": "laravel, php, enum, ترجمة, تعدد اللغات, EnumTranslatable"
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f1ea;
+    --paper:#fffdf8;
+    --ink:#1f2421;
+    --muted:#5c6660;
+    --accent:#8a4b2d;
+    --accent-soft:#e8d9cd;
+    --line:#e3ddd1;
+    --code-bg:#1f2421;
+    --code-ink:#f4f1ea;
+    --code-key:#e0a458;
+    --code-str:#9bbf8a;
+    --code-com:#7b857f;
+    --code-fn:#8fb9d4;
+    --php:#6c7eb7;
+    --ok:#4f7a44;
+    --ok-bg:#e1ecdb;
+    --dep:#a3473b;
+    --dep-bg:#f0ddd9;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 15% -5%, rgba(138,75,45,.07), transparent 45%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans Arabic', sans-serif;
+    line-height:1.9;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:820px; margin:0 auto; padding:64px 24px 96px;}
+
+  /* Header */
+  header{margin-bottom:40px; border-bottom:2px solid var(--line); padding-bottom:32px;}
+  .kicker{
+    display:inline-block; font-size:13px; font-weight:700; letter-spacing:.5px;
+    color:var(--accent); background:var(--accent-soft);
+    padding:6px 14px; border-radius:999px; margin-bottom:22px;
+  }
+  h1{
+    font-family:'IBM Plex Sans Arabic', sans-serif; font-size:clamp(34px,6vw,54px);
+    font-weight:700; margin:0 0 14px; line-height:1.2;
+  }
+  .sub{color:var(--muted); font-size:19px; margin:0; max-width:60ch;}
+
+  /* Legend */
+  .legend{display:flex; flex-wrap:wrap; gap:10px; margin:28px 0 4px;}
+  .legend span{font-size:13px; font-weight:600; padding:5px 12px; border-radius:999px;
+    color:var(--accent); background:var(--accent-soft); direction:ltr;}
+
+  /* Sections */
+  section{margin-top:54px;}
+  .group-title{
+    font-family:'IBM Plex Sans Arabic', sans-serif; font-size:28px; font-weight:700;
+    margin:0 0 6px; line-height:1.4; padding-right:16px;
+    border-right:5px solid var(--accent); display:flex; align-items:center; gap:12px;
+  }
+  .group-desc{color:var(--muted); font-size:16px; margin:0 0 24px;}
+
+  /* Cards */
+  .card{
+    background:var(--paper); border:1px solid var(--line); border-radius:16px;
+    padding:22px 24px; margin-bottom:18px;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .card:hover{transform:translateY(-2px); box-shadow:0 14px 30px -16px rgba(31,36,33,.3);}
+  .card-head{display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:6px;}
+  .tag{
+    font-family:'JetBrains Mono', monospace; font-size:15px; font-weight:700;
+    color:#fff; background:var(--accent); padding:4px 13px; border-radius:8px; direction:ltr;
+  }
+  .status{font-size:12px; font-weight:700;
+    padding:3px 12px; border-radius:999px;}
+  .s-ok{color:var(--ok); background:var(--ok-bg);}
+  .s-dep{color:var(--dep); background:var(--dep-bg);}
+  .card p{margin:8px 0 0;}
+
+  /* مثال من الواقع */
+  .analogy{
+    border-right:3px solid var(--accent-soft); padding:2px 14px 2px 0;
+    color:var(--muted); margin:0 0 4px;
+  }
+  .analogy strong{color:var(--ink);}
+
+  /* مصطلح إنجليزي ضمن النص */
+  .en{
+    font-family:'JetBrains Mono', monospace; font-size:.88em;
+    background:var(--accent-soft); color:var(--accent);
+    padding:1px 7px; border-radius:6px; font-weight:500; direction:ltr; display:inline-block;
+  }
+
+  /* Code blocks — تبقى بالاتجاه الإنجليزي */
+  .code-label{
+    display:inline-block; font-family:'JetBrains Mono', monospace;
+    font-size:13px; color:var(--muted); margin:14px 0 6px; letter-spacing:.5px; direction:ltr;
+  }
+  pre{
+    background:var(--code-bg); color:var(--code-ink);
+    font-family:'JetBrains Mono', monospace; font-size:14px; line-height:1.65;
+    padding:20px 22px; border-radius:12px; overflow-x:auto; margin:0;
+    box-shadow:0 10px 30px -14px rgba(31,36,33,.4);
+    border:1px solid rgba(255,255,255,.06);
+    direction:ltr; text-align:left; tab-size:4;
+  }
+  pre code{font-family:inherit;}
+  pre .c-com{color:var(--code-com); font-style:italic;}
+  pre .c-key{color:var(--code-key);}
+  pre .c-str{color:var(--code-str);}
+  pre .c-fn{color:var(--code-fn);}
+  pre .c-php{color:var(--php);}
+
+  .why{margin-top:16px; background:var(--ok-bg); border-radius:10px; padding:12px 16px;}
+  .why strong{color:var(--ok);}
+
+  .callout{background:var(--accent-soft); border-radius:16px; padding:26px 28px; margin-top:46px;}
+  .callout .group-title{border:none; padding:0; margin-bottom:12px;}
+  .callout p{margin:0 0 12px;}
+  .callout p:last-child{margin:0;}
+
+  footer{
+    margin-top:60px; padding-top:24px; border-top:2px solid var(--line);
+    color:var(--muted); font-size:15px; text-align:center;
+  }
+  footer a{color:var(--accent);}
+
+  /* ===== شريط الموقع العلوي ===== */
+  .site-topbar{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:12px 24px;
+    background:rgba(244,241,234,.85); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .site-topbar a{text-decoration:none;}
+  .site-topbar .tb-home{
+    font-family:'IBM Plex Sans Arabic', sans-serif; font-size:15px; font-weight:600;
+    color:var(--ink); display:inline-flex; align-items:center; gap:7px;
+    transition:color .2s ease;
+  }
+  .site-topbar .tb-home:hover{color:var(--accent);}
+  .site-topbar .tb-lang{
+    font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700;
+    color:var(--accent); background:var(--accent-soft);
+    padding:6px 14px; border-radius:999px; direction:ltr;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .site-topbar .tb-lang:hover{transform:translateY(-1px); box-shadow:0 8px 18px -10px rgba(138,75,45,.6);}
+</style>
+</head>
+<body>
+
+<!-- شريط علوي: العودة للرئيسية + الانتقال للنسخة بلغة أخرى -->
+<nav class="site-topbar">
+  <a class="tb-home" href="../../index.html">→ الرئيسية</a>
+  <a class="tb-lang" href="en.html" lang="en">EN</a>
+</nav>
+
+<div class="wrap">
+
+  <header>
+    <span class="kicker">Laravel · PHP · تعدّد اللغات</span>
+    <h1>ترجمة الـEnums في Laravel</h1>
+    <p class="sub">توقّف عن كتابة النصوص داخل كتل <span class="en">match</span>.  <strong>laravel-enum-translatable</strong> تمنح الـ<span class="en">enums</span> في PHP <strong>ترجمة كاملة، و<span class="en">array helpers</span>، ومقارنة آمنة</strong> — كلها عبر <span class="en">traits</span></p>
+    <div class="legend">
+      <span>composer require osama-98/laravel-enum-translatable</span>
+      <span>PHP 8.2+</span>
+      <span>Laravel 11+</span>
+    </div>
+  </header>
+
+  <!-- مقدمة -->
+  <div class="callout" style="margin-top:36px;">
+    <p>الـ<span class="en">enums</span> هي المكان الطبيعي لمجموعات الـ<span class="en">cases</span> الثابتة — <span class="en">OrderStatus</span> و<span class="en">CourseStatus</span> و<span class="en">Role</span>. لكن ما إن يتحدّث تطبيقك أكثر من لغة حتى يظهر سؤال: <strong>أين يعيش النص الذي يقرأه المستخدم؟</strong></p>
+    <p>الحل المعتاد <span class="en">match</span> داخل الـ<span class="en">enum</span>، أو استخدام <span class="en">__()</span> في الـ<span class="en">Blade</span></p>
+  </div>
+
+  <!-- ===================== المشكلة ===================== -->
+  <section>
+    <h2 class="group-title"><span class="tag">لماذا</span> كتابة النص داخل الكود</h2>
+    <p class="group-desc"><span class="en">match</span> داخل الـ<span class="en">enum</span> يربط الـ<span class="en">data type</span> بلغة واحدة.</p>
+    <div class="card">
+      <p class="analogy"> طباعة النص مباشرةً على الـ<span class="en">enum</span> قد يعمل بشكل جيد عندما يكون النظام بلغة واحدة ولكن عند اضافة لغة جديدة يصبح  الامر معقد.</p>
+
+      <div class="card-head" style="margin-top:18px;"><span class="status s-dep">قبل</span></div>
+      <span class="code-label">OrderStatusEnum.php</span>
+<pre><code><span class="c-com">&lt;?php</span>
+
+<span class="c-key">enum</span> <span class="c-php">OrderStatusEnum</span>: <span class="c-key">string</span>
+{
+    <span class="c-key">case</span> PENDING   = <span class="c-str">'pending'</span>;
+    <span class="c-key">case</span> SHIPPED   = <span class="c-str">'shipped'</span>;
+    <span class="c-key">case</span> DELIVERED = <span class="c-str">'delivered'</span>;
+
+    <span class="c-key">public function</span> <span class="c-fn">label</span>(): <span class="c-key">string</span>
+    {
+        <span class="c-key">return match</span>(<span class="c-php">$this</span>) {
+            <span class="c-key">self</span>::PENDING   =&gt; <span class="c-str">'Pending'</span>,   <span class="c-com">// English only —</span>
+            <span class="c-key">self</span>::SHIPPED   =&gt; <span class="c-str">'Shipped'</span>,   <span class="c-com">// adding Arabic means</span>
+            <span class="c-key">self</span>::DELIVERED =&gt; <span class="c-str">'Delivered'</span>, <span class="c-com">// rewriting this method</span>
+        };
+    }
+}</code></pre>
+      <p class="why"><strong>المشكلة:</strong> اصبح الـ<span class="en">enum</span> يملك الترجمة. كل لغة، وكل تعديل صياغة، وكل شكل لاستجابة الـ<span class="en">API</span> يفرض تعديلاً على ملف يُفترض أن يصف الـ<span class="en">cases</span> فقط.</p>
+    </div>
+  </section>
+
+  <!-- ===================== التثبيت ===================== -->
+  <section>
+    <h2 class="group-title"><span class="tag">1</span> الخطوات</h2>
+    <p class="group-desc">أمر Composer واحد، ثم وَلِّد Enum عبر مساعد artisan.</p>
+    <div class="card">
+      <span class="code-label">terminal</span>
+<pre><code><span class="c-com"># requires PHP 8.2+ and Laravel 11+</span>
+composer require osama-98/laravel-enum-translatable
+
+<span class="c-com"># optional: scaffold a new enum class</span>
+php artisan make:enum OrderStatus</code></pre>
+
+      <p style="margin-top:18px;">طبّق الـtrait <span class="en">EnumTranslatable</span> وعرّف الحالات. لا حاجة لدالة <span class="en">label()</span> — النصوص تأتي من ملف اللغة.</p>
+      <span class="code-label">app/Enums/OrderStatusEnum.php</span>
+<pre><code><span class="c-com">&lt;?php</span>
+
+<span class="c-key">use</span> <span class="c-php">Osama\LaravelEnums\Traits\EnumTranslatable</span>;
+
+<span class="c-key">enum</span> <span class="c-php">OrderStatusEnum</span>: <span class="c-key">string</span>
+{
+    <span class="c-key">use</span> <span class="c-php">EnumTranslatable</span>;
+
+    <span class="c-key">case</span> PENDING   = <span class="c-str">'pending'</span>;
+    <span class="c-key">case</span> SHIPPED   = <span class="c-str">'shipped'</span>;
+    <span class="c-key">case</span> DELIVERED = <span class="c-str">'delivered'</span>;
+}</code></pre>
+    </div>
+  </section>
+
+  <!-- ===================== ملفات اللغة ===================== -->
+  <section>
+    <h2 class="group-title"><span class="tag">2</span> ضع النصوص في <span class="en" style="font-size:.7em;">lang/</span></h2>
+    <p class="group-desc">اسم الـ<span class="en">enum class</span> يتحوّل إلى مفتاح. كل لغة مجرّد ملف إضافي.</p>
+    <div class="card">
+      <p>النصوص مفهرسة بنسخة <span class="en">snake_case</span> بصيغة الجمع من اسم الـ<span class="en">enum</span> — <span class="en">OrderStatusEnum</span> &larr; <span class="en">order_statuses</span>. أضف ملفاً لكل لغة وتكتمل الترجمة.</p>
+
+      <span class="code-label">lang/en/enums.php</span>
+<pre><code><span class="c-com">&lt;?php</span>
+
+<span class="c-key">return</span> [
+    <span class="c-str">'order_statuses'</span> =&gt; [
+        <span class="c-str">'pending'</span>   =&gt; <span class="c-str">'Pending'</span>,
+        <span class="c-str">'shipped'</span>   =&gt; <span class="c-str">'Shipped'</span>,
+        <span class="c-str">'delivered'</span> =&gt; <span class="c-str">'Delivered'</span>,
+    ],
+];</code></pre>
+
+      <span class="code-label">lang/ar/enums.php</span>
+<pre><code><span class="c-com">&lt;?php</span>
+
+<span class="c-key">return</span> [
+    <span class="c-str">'order_statuses'</span> =&gt; [
+        <span class="c-str">'pending'</span>   =&gt; <span class="c-str">'قيد الانتظار'</span>,
+        <span class="c-str">'shipped'</span>   =&gt; <span class="c-str">'تم الشحن'</span>,
+        <span class="c-str">'delivered'</span> =&gt; <span class="c-str">'تم التوصيل'</span>,
+    ],
+];</code></pre>
+    </div>
+  </section>
+
+  <!-- ===================== قراءة النص ===================== -->
+  <section>
+    <h2 class="group-title"><span class="tag">3</span> اقرأ النص</h2>
+    <p class="group-desc"><span class="en">trans()</span> تستخدم اللغة الحالية؛ مرّر لغة لتجاوزها؛ و<span class="en">allTrans()</span> تُرجِع كل اللغات دفعة واحدة.</p>
+    <div class="card">
+      <span class="code-label">anywhere — controller, Blade, resource</span>
+<pre><code><span class="c-php">$status</span> = <span class="c-php">OrderStatusEnum</span>::PENDING;
+
+<span class="c-php">$status</span>-&gt;<span class="c-fn">trans</span>();              <span class="c-com">// 'Pending'  (uses app()->getLocale())</span>
+<span class="c-php">$status</span>-&gt;<span class="c-fn">trans</span>(<span class="c-str">'ar'</span>);          <span class="c-com">// 'قيد الانتظار'</span>
+
+<span class="c-com">// optional context — points at a sibling key for a longer string</span>
+<span class="c-php">$status</span>-&gt;<span class="c-fn">trans</span>(context: <span class="c-str">'description'</span>);
+<span class="c-com">// 'This order is awaiting processing.'</span>
+
+<span class="c-com">// every supported locale in one call</span>
+<span class="c-php">$status</span>-&gt;<span class="c-fn">allTrans</span>();
+<span class="c-com">// ['en' =&gt; 'Pending', 'ar' =&gt; 'قيد الانتظار']</span></code></pre>
+    </div>
+  </section>
+
+  <!-- ===================== مصفوفات للـAPI ===================== -->
+  <section>
+    <h2 class="group-title"><span class="tag">4</span> أرسلها للواجهة الأمامية</h2>
+    <p class="group-desc">حوّل الـ<span class="en">enum</span> كاملاً إلى <span class="en">value / name</span> مترجمة — مثالية لقائمة <span class="en">dropdown</span> أو استجابة <span class="en">JSON</span>.</p>
+    <div class="card">
+      <p class="analogy"><strong>قائمة الطعام:</strong> الـ<span class="en">select</span> يحتاج القيمة المخزَّنة والكلمة التي يقرأها المستخدم معاً. هذه الـ<span class="en">methods</span> تسلّمك الاثنتين، مترجمتَين، باستدعاء واحد.</p>
+
+      <span class="code-label">building a select / API payload</span>
+<pre><code><span class="c-com">// array of ['value' =&gt; ..., 'name' =&gt; ...] pairs</span>
+<span class="c-php">OrderStatusEnum</span>::<span class="c-fn">toArrayTrans</span>(<span class="c-str">'ar'</span>);
+<span class="c-com">// [</span>
+<span class="c-com">//   ['value' =&gt; 'pending',   'name' =&gt; 'قيد الانتظار'],</span>
+<span class="c-com">//   ['value' =&gt; 'shipped',   'name' =&gt; 'تم الشحن'],</span>
+<span class="c-com">//   ['value' =&gt; 'delivered', 'name' =&gt; 'تم التوصيل'],</span>
+<span class="c-com">// ]</span>
+
+<span class="c-com">// same data, as a Laravel Collection for fluent chaining</span>
+<span class="c-php">OrderStatusEnum</span>::<span class="c-fn">toTransCollection</span>()-&gt;<span class="c-fn">pluck</span>(<span class="c-str">'name'</span>, <span class="c-str">'value'</span>);
+
+<span class="c-com">// a single case as a structured pair</span>
+<span class="c-php">$status</span>-&gt;<span class="c-fn">object</span>();
+<span class="c-com">// ['value' =&gt; 'pending', 'name' =&gt; 'Pending']</span></code></pre>
+    </div>
+  </section>
+
+  <!-- ===================== الـtraits الثلاثة ===================== -->
+  <section>
+    <h2 class="group-title"><span class="tag">5</span> اختر الـtrait المناسب</h2>
+    <div class="card">
+
+      <span class="code-label">three levels</span>
+<pre><code><span class="c-com">// 1. comparison + safe casting only</span>
+<span class="c-key">use</span> <span class="c-php">EnumWrappable</span>;
+
+<span class="c-com">// 2. + array helpers (names, values, filtering, random)</span>
+<span class="c-key">use</span> <span class="c-php">EnumArrayable</span>;
+
+<span class="c-com">// 3. + full translation (everything above, plus trans/allTrans)</span>
+<span class="c-key">use</span> <span class="c-php">EnumTranslatable</span>;</code></pre>
+    </div>
+  </section>
+
+  <!-- ===================== التغليف والمقارنة ===================== -->
+  <section>
+    <h2 class="group-title"><span class="tag">6</span> تحويل ومقارنة آمنان</h2>
+    <p class="group-desc">حوّل المدخلات غير الموثوقة إلى Enum، وقارن دون استخدام <span class="en">-&gt;value</span> في كل مكان.</p>
+    <div class="card">
+      <p class="analogy"><span class="en">wrap()</span> تقوم هذه الدالة بالتحقق من وجود القيمة بالـ <span class="en">enum</span> وفي حال العثور عليها تقوم بارجاع object من هذا الـ <span class="en">enum</span> اما في حال عدم العثور عليها فتقوم بارجاع <span class="en">null</span></p>
+
+      <span class="code-label">EnumWrappable helpers</span>
+<pre><code><span class="c-com">// cast a raw string/value into the enum — safely</span>
+<span class="c-php">OrderStatusEnum</span>::<span class="c-fn">wrap</span>(<span class="c-str">'pending'</span>);          <span class="c-com">// OrderStatusEnum::PENDING</span>
+<span class="c-php">OrderStatusEnum</span>::<span class="c-fn">wrap</span>(<span class="c-str">'unknown'</span>);          <span class="c-com">// null (strict: throws)</span>
+
+<span class="c-com">// readable comparisons — no manual ->value plumbing</span>
+<span class="c-php">$status</span>-&gt;<span class="c-fn">is</span>(<span class="c-str">'pending'</span>);                 <span class="c-com">// true</span>
+<span class="c-php">$status</span>-&gt;<span class="c-fn">isNot</span>(<span class="c-str">'shipped'</span>);              <span class="c-com">// true</span>
+<span class="c-php">$status</span>-&gt;<span class="c-fn">isAny</span>([<span class="c-str">'pending'</span>, <span class="c-str">'shipped'</span>]);  <span class="c-com">// true</span></code></pre>
+      <p class="why"><strong>لماذا يفيد:</strong> بيانات الـ<span class="en">request</span> و<span class="en">query strings</span> و<span class="en">webhook payloads</span> تتحوّل إلى <span class="en">enums</span> — وبقيّة الكود يعمل بالـ<span class="en">types</span> لا بالـ<span class="en">strings</span></p>
+    </div>
+  </section>
+
+  <!-- ===================== دوال المصفوفات ===================== -->
+  <section>
+    <h2 class="group-title"><span class="tag">7</span> الـ<span class="en">array helpers</span></h2>
+    <div class="card">
+      <span class="code-label">querying the case set</span>
+<pre><code><span class="c-php">OrderStatusEnum</span>::<span class="c-fn">names</span>();    <span class="c-com">// ['PENDING', 'SHIPPED', 'DELIVERED']</span>
+<span class="c-php">OrderStatusEnum</span>::<span class="c-fn">values</span>();   <span class="c-com">// ['pending', 'shipped', 'delivered']</span>
+
+<span class="c-com">// filter the set by value</span>
+<span class="c-php">OrderStatusEnum</span>::<span class="c-fn">only</span>([<span class="c-str">'pending'</span>, <span class="c-str">'shipped'</span>]);
+<span class="c-php">OrderStatusEnum</span>::<span class="c-fn">except</span>([<span class="c-str">'delivered'</span>]);
+
+<span class="c-com">// wildcard matching</span>
+<span class="c-php">OrderStatusEnum</span>::<span class="c-fn">matching</span>(<span class="c-str">'ship*'</span>);     <span class="c-com">// [SHIPPED]</span>
+<span class="c-php">OrderStatusEnum</span>::<span class="c-fn">contains</span>(<span class="c-str">'end'</span>);       <span class="c-com">// [PENDING]</span>
+
+<span class="c-com">// random pick — handy for seeders &amp; factories</span>
+<span class="c-php">OrderStatusEnum</span>::<span class="c-fn">randomCase</span>(except: <span class="c-php">OrderStatusEnum</span>::DELIVERED);</code></pre>
+    </div>
+  </section>
+
+  <!-- ===================== الإعداد ===================== -->
+  <section>
+    <h2 class="group-title"><span class="tag">8</span> الإعداد (اختياري)</h2>
+    <div class="card">
+      <span class="code-label">terminal</span>
+<pre><code>php artisan vendor:publish --tag=<span class="c-str">"laravel-enums-config"</span></code></pre>
+      <p style="margin-top:14px;">خيارات أساسية في <span class="en">config/laravel-enums.php</span>:</p>
+      <ul style="color:var(--muted); margin:8px 0 0; padding-right:22px;">
+        <li><span class="en">supported_locales</span> — اللغات التي يمرّ عليها <span class="en">allTrans()</span>.</li>
+        <li><span class="en">modular_enabled</span> — قراءة الترجمات من الـ<span class="en">modules</span> (مثل nWidart/laravel-modules).</li>
+        <li><span class="en">namespace_resolver</span> — منطق مخصّص لتحديد الـ<span class="en">namespace</span> الخاص بالترجمة.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    ال: <a href="https://github.com/osama-98/laravel-enum-translatable" target="_blank" rel="noopener">osama-98/laravel-enum-translatable</a>
+    · قراءة إضافية: <a href="https://laravel-news.com/translatable-enums" target="_blank" rel="noopener">Laravel News</a>
+    · <a href="https://masteryoflaravel.medium.com/stop-hardcoding-translations-the-revolutionary-way-to-build-multilingual-laravel-apps-with-bf303533b8b0" target="_blank" rel="noopener">Medium</a>
+    <div style="margin-top:12px; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:8px 16px;">
+      <strong style="color:var(--ink);">Osama Sadah</strong>
+      <a href="https://github.com/osama-98" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/osama-sadah" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="tel:+962798296383" dir="ltr">+962&nbsp;79&nbsp;829&nbsp;6383</a>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

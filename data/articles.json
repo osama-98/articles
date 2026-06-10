@@ -1,5 +1,22 @@
 [
   {
+    "id": "laravel-enum-translatable",
+    "title": {
+      "en": "Translatable Enums in Laravel",
+      "ar": "ترجمة الـEnums في Laravel"
+    },
+    "summary": {
+      "en": "Stop hardcoding enum labels — add first-class translations, array helpers, and safe comparison to PHP backed enums.",
+      "ar": "توقّف عن كتابة نصوص الـenums داخل الكود — أضف ترجمة كاملة و array helpers ومقارنة آمنة للـenums في PHP."
+    },
+    "date": "2026-06-10",
+    "tags": ["Laravel", "PHP", "i18n"],
+    "paths": {
+      "en": "articles/laravel-enum-translatable/en.html",
+      "ar": "articles/laravel-enum-translatable/ar.html"
+    }
+  },
+  {
     "id": "solid-principles",
     "title": {
       "en": "The SOLID Principles, Made Simple",
