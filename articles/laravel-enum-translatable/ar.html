@@ -220,7 +220,7 @@
   <header>
     <span class="kicker">Laravel · PHP · تعدّد اللغات</span>
     <h1>ترجمة الـEnums في Laravel</h1>
-    <p class="sub">توقّف عن كتابة النصوص داخل كتل <span class="en">match</span>.  <strong>laravel-enum-translatable</strong> تمنح الـ<span class="en">enums</span> في PHP <strong>ترجمة كاملة، و<span class="en">array helpers</span>، ومقارنة آمنة</strong> — كلها عبر <span class="en">traits</span></p>
+    <p class="sub">توقّف عن كتابة النصوص داخل <span class="en">match</span>.  <strong>laravel-enum-translatable</strong> تمنح الـ<span class="en">enums</span> في PHP <strong>ترجمة كاملة، و<span class="en">array helpers</span>، ومقارنة آمنة</strong> — كلها عبر <span class="en">traits</span></p>
     <div class="legend">
       <span>composer require osama-98/laravel-enum-translatable</span>
       <span>PHP 8.2+</span>
@@ -267,7 +267,7 @@
   <!-- ===================== التثبيت ===================== -->
   <section>
     <h2 class="group-title"><span class="tag">1</span> الخطوات</h2>
-    <p class="group-desc">أمر Composer واحد، ثم وَلِّد Enum عبر مساعد artisan.</p>
+    <p class="group-desc">أمر Composer واحد، ثم انشئ Enum عن طريق الكوماند الموجود في البكج لمساعدتك في انشاء Enum.</p>
     <div class="card">
       <span class="code-label">terminal</span>
 <pre><code><span class="c-com"># requires PHP 8.2+ and Laravel 11+</span>
@@ -276,7 +276,7 @@ composer require osama-98/laravel-enum-translatable
 <span class="c-com"># optional: scaffold a new enum class</span>
 php artisan make:enum OrderStatus</code></pre>
 
-      <p style="margin-top:18px;">طبّق الـtrait <span class="en">EnumTranslatable</span> وعرّف الحالات. لا حاجة لدالة <span class="en">label()</span> — النصوص تأتي من ملف اللغة.</p>
+      <p style="margin-top:18px;">طبّق الـtrait <span class="en">EnumTranslatable</span> وأضف الحالات. لا حاجة لدالة <span class="en">label()</span> — النصوص تأتي من ملف اللغة.</p>
       <span class="code-label">app/Enums/OrderStatusEnum.php</span>
 <pre><code><span class="c-com">&lt;?php</span>
 
@@ -295,10 +295,10 @@ php artisan make:enum OrderStatus</code></pre>
 
   <!-- ===================== ملفات اللغة ===================== -->
   <section>
-    <h2 class="group-title"><span class="tag">2</span> ضع النصوص في <span class="en" style="font-size:.7em;">lang/</span></h2>
-    <p class="group-desc">اسم الـ<span class="en">enum class</span> يتحوّل إلى مفتاح. كل لغة مجرّد ملف إضافي.</p>
+    <h2 class="group-title"><span class="tag">2</span> قم باضافة الترجمة لكل قيمة من ال Enum في <span class="en" style="font-size:.7em;">lang/</span></h2>
     <div class="card">
-      <p>النصوص مفهرسة بنسخة <span class="en">snake_case</span> بصيغة الجمع من اسم الـ<span class="en">enum</span> — <span class="en">OrderStatusEnum</span> &larr; <span class="en">order_statuses</span>. أضف ملفاً لكل لغة وتكتمل الترجمة.</p>
+      <p>البكج تبحث بشكل تلفائي عن الترجمة, كل ما عليك هو اضافة هذه الترجمة لكل لغة في المسار <span class="en">lang/{ar,en,es,...}/enums.php</span></p>
+      <p>مفتاح <span class="en">order_statuses</span> ليس عشوائياً — البكج يشتقه تلقائياً من اسم الـEnum. يأخذ اسم الكلاس <span class="en">OrderStatusEnum</span>, يحذف لاحقة <span class="en">Enum</span>, يحوّله إلى <span class="en">snake_case</span> ثم يجمعه (plural) فينتج <span class="en">order_statuses</span>. لذلك يكفي وضع الترجمات تحت هذا المفتاح وسيجدها البكج دون أي إعداد إضافي.</p>
 
       <span class="code-label">lang/en/enums.php</span>
 <pre><code><span class="c-com">&lt;?php</span>
